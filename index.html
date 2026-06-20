@@ -1,4 +1,40 @@
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طموح | منصة العقارات</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c9960c;--gold-light:#fde68a;--gold-dark:#a07508;--gold-mid:#d4a017;
+  --bg:#fffdf7;--bg2:#fdf8ed;--bg3:#f5edd0;--bg4:#ede0b0;
+  --text:#1a1509;--text2:#6b5e2e;--text3:#9b8c55;
+  --border:rgba(180,140,20,0.18);--border2:rgba(180,140,20,0.35);
+  --info-bg:#e6f1fb;--info-text:#185fa5;--roof-bg:#f3e8ff;--roof-text:#7c3aed;
+  --success-bg:#eaf3de;--success-text:#3b6d11;
+  --warning-bg:#faeeda;--warning-text:#854f0b;
+  --danger-bg:#fcebeb;--danger-text:#a32d2d;
+  --radius:8px;--radius-lg:14px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1a1509;--bg2:#221c0a;--bg3:#2a230e;--bg4:#332b12;
+  --text:#fdf8ed;--text2:#c9a84c;--text3:#7a6830;
+  --border:rgba(200,160,30,0.18);--border2:rgba(200,160,30,0.35);
+  --info-bg:#042c53;--info-text:#85b7eb;--roof-bg:#3b0764;--roof-text:#c4b5fd;
+  --success-bg:#173404;--success-text:#97c459;
+  --warning-bg:#412402;--warning-text:#ef9f27;
+  --danger-bg:#501313;--danger-text:#f09595;
+}}
+body{font-family:'Segoe UI',Tahoma,sans-serif;color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background-image:url('https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w:1920&auto=format&fit=crop');background-image:url('https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=1920&auto=format&fit=crop');background-size:cover;background-position:center;background-attachment:fixed}
+body::after{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(135deg,rgba(245,237,208,0.93) 0%,rgba(240,228,180,0.90) 100%)}
+@media(prefers-color-scheme:dark){body::after{background:linear-gradient(135deg,rgba(26,21,9,0.94) 0%,rgba(34,28,10,0.92) 100%)}}
+.container{max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.header{position:relative;border:1px solid rgba(201,150,12,0.4);margin-bottom:1.5rem;border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 4px 24px rgba(180,130,0,0.15);min-height:140px}
+.header-bg{position:absolute;inset:0;background-image:linear-gradient(135deg,rgba(8,6,2,0.90) 0%,rgba(18,14,4,0.84) 55%,rgba(38,30,6,0.78) 100%),url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1600&auto=format&fit=crop');background-size:cover;background-position:center}
 .header-content{position:relative;z-index:1;padding:1.25rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .header-tagline{font-size:12px;color:var(--gold-light);margin-top:6px;display:flex;align-items:center;gap:5px;font-weight:500;opacity:.9}
 .header-title{font-size:23px;font-weight:700;letter-spacing:2px;color:#fff}
@@ -456,49 +492,61 @@ let reminders=[];
 let editOfferIdx=null,pendingImgs=[],lbImgs=[],lbIdx=0;
 let db=null;
 
-// IndexedDB - works with file:// in Safari and Chrome
-function initDB(){
-  return new Promise((resolve,reject)=>{
-    const req=indexedDB.open('TamouhDB',1);
-    req.onupgradeneeded=e=>{
-      const d=e.target.result;
-      if(!d.objectStoreNames.contains('store'))
-        d.createObjectStore('store');
+// Firebase Firestore - syncs across all devices
+const firebaseConfig = {
+  apiKey: "AIzaSyAqGFicqx5OGdfpUHAfSQcalO1XSbTuAVE",
+  authDomain: "tamouh-4c6e4.firebaseapp.com",
+  projectId: "tamouh-4c6e4",
+  storageBucket: "tamouh-4c6e4.firebasestorage.app",
+  messagingSenderId: "687865377872",
+  appId: "1:687865377872:web:bce20eb46ff183e3be8d55",
+  measurementId: "G-053LHJD13Q"
+};
+
+// Load Firebase from CDN
+function loadFirebase(){
+  return new Promise((resolve)=>{
+    if(window.firebase){resolve();return;}
+    const s1=document.createElement('script');
+    s1.src='https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+    s1.onload=()=>{
+      const s2=document.createElement('script');
+      s2.src='https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+      s2.onload=()=>resolve();
+      document.head.appendChild(s2);
     };
-    req.onsuccess=e=>{db=e.target.result;resolve(db);};
-    req.onerror=()=>reject(req.error);
+    document.head.appendChild(s1);
   });
 }
-function dbGet(key){
-  return new Promise((resolve)=>{
-    if(!db){resolve(null);return;}
-    const tx=db.transaction('store','readonly');
-    const req=tx.objectStore('store').get(key);
-    req.onsuccess=()=>resolve(req.result||null);
-    req.onerror=()=>resolve(null);
+
+let db=null;
+
+function initDB(){
+  return loadFirebase().then(()=>{
+    firebase.initializeApp(firebaseConfig);
+    db=firebase.firestore();
   });
 }
-function dbSet(key,val){
-  return new Promise((resolve)=>{
-    if(!db){resolve();return;}
-    const tx=db.transaction('store','readwrite');
-    tx.objectStore('store').put(val,key);
-    tx.oncomplete=()=>resolve();
-    tx.onerror=()=>resolve();
-  });
-}
+
 async function persist(){
-  await dbSet('br_offers',JSON.stringify(offers));
-  await dbSet('br_clients',JSON.stringify(clients));
-  await dbSet('br_reminders',JSON.stringify(reminders));
+  if(!db)return;
+  try{
+    await db.collection('data').doc('offers').set({list:JSON.stringify(offers)});
+    await db.collection('data').doc('clients').set({list:JSON.stringify(clients)});
+    await db.collection('data').doc('reminders').set({list:JSON.stringify(reminders)});
+  }catch(e){console.error('Save error:',e);}
 }
+
 async function loadData(){
-  const o=await dbGet('br_offers');
-  const c=await dbGet('br_clients');
-  const r=await dbGet('br_reminders');
-  offers=JSON.parse(o||'[]');
-  clients=JSON.parse(c||'[]');
-  reminders=JSON.parse(r||'[]');
+  if(!db)return;
+  try{
+    const o=await db.collection('data').doc('offers').get();
+    const c=await db.collection('data').doc('clients').get();
+    const r=await db.collection('data').doc('reminders').get();
+    offers=JSON.parse(o.exists?o.data().list:'[]');
+    clients=JSON.parse(c.exists?c.data().list:'[]');
+    reminders=JSON.parse(r.exists?r.data().list:'[]');
+  }catch(e){console.error('Load error:',e);}
 }
 function toast(msg){
   const t=document.getElementById('toast');
