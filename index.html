@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>طموح | منصة العقارات</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --gold:#c9960c;--gold-light:#fde68a;--gold-dark:#a07508;--gold-mid:#d4a017;
-  --bg:#fffdf7;--bg2:#fdf8ed;--bg3:#f5edd0;--bg4:#ede0b0;
-  --text:#1a1509;--text2:#6b5e2e;--text3:#9b8c55;
-  --border:rgba(180,140,20,0.18);--border2:rgba(180,140,20,0.35);
-  --info-bg:#e6f1fb;--info-text:#185fa5;--roof-bg:#f3e8ff;--roof-text:#7c3aed;
-  --success-bg:#eaf3de;--success-text:#3b6d11;
-  --warning-bg:#faeeda;--warning-text:#854f0b;
-  --danger-bg:#fcebeb;--danger-text:#a32d2d;
-  --radius:8px;--radius-lg:14px;
-}
-@media(prefers-color-scheme:dark){:root{
-  --bg:#1a1509;--bg2:#221c0a;--bg3:#2a230e;--bg4:#332b12;
-  --text:#fdf8ed;--text2:#c9a84c;--text3:#7a6830;
-  --border:rgba(200,160,30,0.18);--border2:rgba(200,160,30,0.35);
-  --info-bg:#042c53;--info-text:#85b7eb;--roof-bg:#3b0764;--roof-text:#c4b5fd;
-  --success-bg:#173404;--success-text:#97c459;
-  --warning-bg:#412402;--warning-text:#ef9f27;
-  --danger-bg:#501313;--danger-text:#f09595;
-}}
-body{font-family:'Segoe UI',Tahoma,sans-serif;color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;position:relative}
-body::before{content:'';position:fixed;inset:0;z-index:-2;background-image:url('https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w:1920&auto=format&fit=crop');background-image:url('https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=1920&auto=format&fit=crop');background-size:cover;background-position:center;background-attachment:fixed}
-body::after{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(135deg,rgba(245,237,208,0.93) 0%,rgba(240,228,180,0.90) 100%)}
-@media(prefers-color-scheme:dark){body::after{background:linear-gradient(135deg,rgba(26,21,9,0.94) 0%,rgba(34,28,10,0.92) 100%)}}
-.container{max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem}
-.header{position:relative;border:1px solid rgba(201,150,12,0.4);margin-bottom:1.5rem;border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 4px 24px rgba(180,130,0,0.15);min-height:140px}
-.header-bg{position:absolute;inset:0;background-image:linear-gradient(135deg,rgba(8,6,2,0.90) 0%,rgba(18,14,4,0.84) 55%,rgba(38,30,6,0.78) 100%),url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1600&auto=format&fit=crop');background-size:cover;background-position:center}
+
 .header-content{position:relative;z-index:1;padding:1.25rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .header-tagline{font-size:12px;color:var(--gold-light);margin-top:6px;display:flex;align-items:center;gap:5px;font-weight:500;opacity:.9}
 .header-title{font-size:23px;font-weight:700;letter-spacing:2px;color:#fff}
